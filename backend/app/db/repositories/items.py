@@ -108,6 +108,7 @@ class ItemsRepository(BaseRepository):  # noqa: WPS214
         favorited: Optional[str] = None,
         limit: int = 20,
         offset: int = 0,
+        title: str = "",
         requested_user: Optional[User] = None,
     ) -> List[Item]:
         query_params: List[Union[str, int]] = []
@@ -196,6 +197,8 @@ class ItemsRepository(BaseRepository):  # noqa: WPS214
                 ),
             )
             # fmt: on
+        if title:
+            query = query.where(items.title.contains(title))
 
         query = query.limit(Parameter(query_params_count + 1)).offset(
             Parameter(query_params_count + 2),
